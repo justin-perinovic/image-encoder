@@ -90,6 +90,14 @@ GIFEncoder.prototype.writeColorTable = function(uniqueColors) {
 
 // Write Application Extension
 GIFEncoder.prototype.writeApplicationExtension = function() {
+    // Only know of the NETSCAPE2.0 extension, but others could exist
+
+    this.writeExtensionIntroducer();
+    this.data.writeByte(0xFF); // Application extension label
+    this.data.writeByte(0x0B); // Block size
+    this.data.writeUTFBytes('NETSCAPE'); // Application identifier code
+    this.writeUTFBytes('2.0'); // Application authentication code
+    // Loop metadata
 }
 
 // Write Comment Extension
@@ -98,6 +106,8 @@ GIFEncoder.prototype.writeCommentExtension = function() {
 
 // Write Plain Text Extension
 GIFEncoder.prototype.writePlainTextExtension = function() {
+    // Apparently not consistently supported. Don't use this. Good to know how to recognize it though.
+
 }
 
 // Write Image Data
