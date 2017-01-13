@@ -43,7 +43,7 @@ GIfEncoder.prototype.writeHeader = function() {
 GIFEncoder.prototype.writeLSD = function(uniqueColorsCount) {
     // Write canvas size
     this.data.writeBytes(ByteUtil.getBytes(this.width).reverse()); // Canvas width
-    this.data.writeBytes(ByteUtil.getBytes(this.reverse));// Canvas height
+    this.data.writeBytes(ByteUtil.getBytes(this.height).reverse());// Canvas height
 
     // Write global color table metadata
     let colorTableByte = 0;
