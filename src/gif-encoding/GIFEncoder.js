@@ -101,13 +101,18 @@ GIFEncoder.prototype.writeApplicationExtension = function() {
 }
 
 // Write Comment Extension
-GIFEncoder.prototype.writeCommentExtension = function() {
+GIFEncoder.prototype.writeCommentExtension = function(commentText) {
+    this.writeExtensionIntroducer();
+    this.data.writeBye(0xFE); // Comment extension label
+    this.data.writeByte(commentText.length); // Block size
+    this.data.writeUTFBytes(commentText); // Comment text bytes
+    this.data.writeByte(0x0); // Block terminator
 }
 
 // Write Plain Text Extension
 GIFEncoder.prototype.writePlainTextExtension = function() {
-    // Apparently not consistently supported. Don't use this. Good to know how to recognize it though.
-
+    // Apparently not consistently supported. Don't use this.
+    // Still good to know how to recognize it though.
 }
 
 // Write Image Data
