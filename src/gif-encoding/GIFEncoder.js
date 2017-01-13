@@ -40,18 +40,22 @@ GIfEncoder.prototype.writeHeader = function() {
     this.data.writeUTFBytes('GIF89a'); // 0x47 0x49 0x46 0x38 0x39 0x61
 };
 
+GIFEncoder.prototype.writeExtensionIntroducer = function() {
+    this.data.writeByte(0x21);
+};
+
 // Write Logical Screen Descriptor
 GIFEncoder.prototype.writeLogicalScreenDescriptor = function(uniqueColorsCount) {
     // Write canvas size
-    this.data.writeBytes(ByteUtil.getBytes(this.width).reverse()); // Canvas width
-    this.data.writeBytes(ByteUtil.getBytes(this.height).reverse());// Canvas height
+    this.data.writeBytes(ByteUtil.getReversedBytes(this.width)); // Canvas width
+    this.data.writeBytes(ByteUtil.getReversedBytes(this.height));// Canvas height
 
     // Write global color table metadata
-    let colorTableByte = 0;
+    let colorTableByte = 0x0;
     colorTableByte |= ((uniqueColorsCount ? 0x1 : 0x0) << 7); // Global color table flag
     colorTableByte |= (0x111 << 4); // Color depth. (val+1) === color bit count. 111 is 256 colors, 000 is 1 color
     colorTableByte |= (0x1 << 3); // Sort flag. Determines whether color table is sorted by decreasing importance
-    colorTableByte |= ByteUtil.getIntBitCount(uniqueColorsCount); // Size of global color table. (val+1) === bit count.
+    colorTableByte |= ByteUtil.getIntBitCount(uniqueColorsCount); // Size of global color table. (val+1) === bit count of size
     this.data.writeByte(colorTableByte);
 
     // Write background color index
@@ -89,11 +93,31 @@ GifEncoder.prototype.writeLocalColorTable = function() {
 }
 
 // Write Image Descriptor
-GifEncoder.prototype.writeImageDescriptor = function() {
+GifEncoder.prototype.writeImageDescriptor = function(uniqueColorsCount) {
+    // Image Descriptor label
+    this.data.writeByte(0x2C);
+
+    // Write image position and size
+    this.data.writeBytes([0x0, 0x0]); // Image left position
+    this.data.writeBytes([0x0, 0x0]); // Image top position
+    this.data.writeBytes(ByteUtil.getReversedBytes(this.width, 2)); // Image width
+    this.data.writeBytes(ByteUtil.getReversedBytes(this.height, 2)); // Image height
+
+    // Packed field with local color table metadata and interlace flag
+    const imageMetaByte = 0x0;
+    imageMetaByte |= (0x0 << 7); // Local color table flag
+    imageMetaByte |= (0x0 << 6); // Interlace flag
+    imageMetaByte |= (0x0 << 5); // Sort flag
+    imageMetaByte |= (0x00 << 3); // Reserved for future use
+    imageMetaByte |= ByteUtil.getIntBitCount(uniqueColorsCount); // Size of local color table. (val+1) === bit count of size
+    this.data.writeByte(imageMetaByte);
 }
 
 // Write Graphic Control Extension
 GifEncoder.prototype.writeGraphicControlExtension = function() {
+    this.writeExtensionIntroducer();
+    this.data.writeByte(0xF9); // Graphic Control Extension Label
+    // More stuff
 }
 
 // Write Trailer

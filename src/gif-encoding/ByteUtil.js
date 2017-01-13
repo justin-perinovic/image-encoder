@@ -1,23 +1,33 @@
+const getBytes = function(num, minByteCount=0) {
+    if (num < 0) {
+        throw new Error('getBytes only supports integers >= 0');
+    } else if (num > 0xFFFFFFF) {
+        throw new Error(`getBytes only supports integers <= ${0xFFFFFFF}`);
+    } else if (num === 0) {
+        return [0];
+    }
+
+
+    const bytes = [];
+
+    let workingNum = num;
+    while (workingNum > 0) {
+        bytes.unshift(workingNum & 0xFF);
+        workingNum = workingNum >> 8;
+    }
+
+    while (bytes.length < minByteCount) {
+        bytes.unshift(0x0);
+    }
+
+    return bytes;
+};
+
 module.exports = {
-    getBytes: function(num) {
-        if (num < 0) {
-            throw new Error('getBytes only supports integers >= 0');
-        } else if (num > 0xFFFFFFF) {
-            throw new Error(`getBytes only supports integers <= ${0xFFFFFFF}`);
-        } else if (num === 0) {
-            return [0];
-        }
+    getBytes: getBytes.bind(this),
 
-
-        const bytes = [];
-
-        let workingNum = num;
-        while (workingNum > 0) {
-            bytes.unshift(workingNum & 0xFF);
-            workingNum = workingNum >> 8;
-        }
-
-        return bytes;
+    getReversedBytes: function() {
+        return getBytes.apply(this, arguments).reverse();
     },
 
     getIntBitCount: function(num) {
