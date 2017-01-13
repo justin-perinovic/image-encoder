@@ -62,7 +62,9 @@ GIFEncoder.prototype.writeLSD = function(uniqueColorsCount) {
 
 // Write Global Color Table
 GifEncoder.prototype.writeGCT = function(uniqueColors) {
-    
+    Object.keys(uniqueColors).forEach((uniqueColorKey) => {
+        this.data.writeBytes(ByteUtil.getBytes(uniqueColors[uniqueColorKey]));
+    });
 };
 
 module.exports = GIFEncoder;
