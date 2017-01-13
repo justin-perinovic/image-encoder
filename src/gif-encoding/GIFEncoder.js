@@ -31,8 +31,9 @@ GIFEncoder.prototype.writeImage = function(rgbaVals) {
 
     // Write file
     this.writeHeader();
-    this.writeLSD(uniqueColorsCount);
-    this.writeGCT(uniqueColors);
+    this.writeLogicalScreenDescriptor(uniqueColorsCount);
+    this.writeGlobalColorTable(uniqueColors);
+    this.writeTrailer();
 };
 
 GIfEncoder.prototype.writeHeader = function() {
@@ -40,7 +41,7 @@ GIfEncoder.prototype.writeHeader = function() {
 };
 
 // Write Logical Screen Descriptor
-GIFEncoder.prototype.writeLSD = function(uniqueColorsCount) {
+GIFEncoder.prototype.writeLogicalScreenDescriptor = function(uniqueColorsCount) {
     // Write canvas size
     this.data.writeBytes(ByteUtil.getBytes(this.width).reverse()); // Canvas width
     this.data.writeBytes(ByteUtil.getBytes(this.height).reverse());// Canvas height
@@ -61,10 +62,43 @@ GIFEncoder.prototype.writeLSD = function(uniqueColorsCount) {
 };
 
 // Write Global Color Table
-GifEncoder.prototype.writeGCT = function(uniqueColors) {
+GifEncoder.prototype.writeGlobalColorTable = function(uniqueColors) {
     Object.keys(uniqueColors).forEach((uniqueColorKey) => {
         this.data.writeBytes(ByteUtil.getBytes(uniqueColors[uniqueColorKey]));
     });
 };
+
+// Write Application Extension
+GifEncoder.prototype.writeApplicationExtension = function() {
+}
+
+// Write Comment Extension
+GifEncoder.prototype.writeCommentExtension = function() {
+}
+
+// Write Plain Text Extension
+GifEncoder.prototype.writePlainTextExtension = function() {
+}
+
+// Write Image Data
+GifEncoder.prototype.writeImageData = function() {
+}
+
+// Write Local Color Table
+GifEncoder.prototype.writeLocalColorTable = function() {
+}
+
+// Write Image Descriptor
+GifEncoder.prototype.writeImageDescriptor = function() {
+}
+
+// Write Graphic Control Extension
+GifEncoder.prototype.writeGraphicControlExtension = function() {
+}
+
+// Write Trailer
+GifEncoder.prototype.writeTrailer = function() {
+    this.data.writeByte(0x3B);
+}
 
 module.exports = GIFEncoder;
