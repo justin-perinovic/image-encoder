@@ -32,7 +32,7 @@ GIFEncoder.prototype.writeImage = function(rgbaVals) {
     // Write file
     this.writeHeader();
     this.writeLogicalScreenDescriptor(uniqueColorsCount);
-    this.writeGlobalColorTable(uniqueColors);
+    this.writeColorTable(uniqueColors);
     this.writeTrailer();
 };
 
@@ -66,7 +66,7 @@ GIFEncoder.prototype.writeLogicalScreenDescriptor = function(uniqueColorsCount) 
 };
 
 // Write Global Color Table
-GifEncoder.prototype.writeGlobalColorTable = function(uniqueColors) {
+GifEncoder.prototype.writeColorTable = function(uniqueColors) {
     Object.keys(uniqueColors).forEach((uniqueColorKey) => {
         this.data.writeBytes(ByteUtil.getBytes(uniqueColors[uniqueColorKey]));
     });
