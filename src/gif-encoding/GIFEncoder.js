@@ -48,7 +48,7 @@ GIFEncoder.prototype.writeLogicalScreenDescriptor = function(uniqueColorsCount) 
 
     // Write global color table metadata
     let colorTableByte = 0;
-    colorTableByte |= (0x1 << 7); // Global color table flag
+    colorTableByte |= ((uniqueColorsCount ? 0x1 : 0x0) << 7); // Global color table flag
     colorTableByte |= (0x111 << 4); // Color depth. (val+1) === color bit count. 111 is 256 colors, 000 is 1 color
     colorTableByte |= (0x1 << 3); // Sort flag. Determines whether color table is sorted by decreasing importance
     colorTableByte |= ByteUtil.getIntBitCount(uniqueColorsCount); // Size of global color table. (val+1) === bit count.
