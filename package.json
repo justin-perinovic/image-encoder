@@ -1,0 +1,13 @@
+{
+  "name": "image-encoder",
+  "version": "1.0.0",
+  "description": "Provide unifying encoding capabilities for various image types.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Justin Perinovic",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
