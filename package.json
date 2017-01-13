@@ -1,6 +1,6 @@
 {
   "name": "image-encoder",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Provide unifying encoding capabilities for various image types.",
   "main": "index.js",
   "scripts": {
